@@ -1,0 +1,119 @@
+Level 0 : 
+
+“cat readme” worked. 
+
+
+Level 1 : boJ9jbbUNNfktd78OOpsqOltutMc3MY1
+
+“cat <-” worked. To open files with special symbols in there names like . And - you need to use < and for space you need to use an escape sequence.
+
+
+Level 2 : CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
+
+“cat spaces\ in\ this\ filename“ worked.
+
+
+Level 3: UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
+
+“cd inhere” and then “cat <.hidden” worked.
+
+
+Level 4: pIwrPrtPN36QITSp3EQaw936yaFoFgAB
+
+“cd inhere” and then “cat <-file07” worked. Had to try others but the weren’t readable.
+
+
+Level 5 : koReBOKuIDDepwhWk7jZC0RTdopnAYKh
+
+Du -a -b
+-a : shows all files.
+-b: tells the block size of the files.
+And then finding 1033 byte file(which is in maybe here 7 and hidden file 2)
+
+Level 6 : DXjZPULLxYr17uwoI01bNLQbtFemEgo7
+
+cd .. and cd.. to get to the root folder. Then run find -user bandit7  -group bandit6 then open the only accessible file(./var/lib/dpkg/info/bandit7.password)
+
+
+Level 7 : HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs
+
+Cat data.txt and then cmd+f and searched for millionth.
+More accurate way would be ‘grep millionth data.txt’
+
+
+Level 8 : cvX2JJa4CFALtqS87jk27qwqGhBM9plV
+cat data.txt | sort | uniq -u(displays only unique elements)
+The definition of unique is that the element below the current ins’t the same so we need to sort it too.
+
+Level 9 : UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR
+
+strings data.txt | grep =. This will give only few elements and one stands out. That’s the password.
+
+Level 10 : truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
+
+base64 -d data.txt gives : The password is IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
+
+Level 11 : IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
+
+cat data.txt | tr a-zA-Z n-za-mN-ZA-M.
+Tried switch it to ascii but numbers would be maped to special characters which doesn’t make sense hence the logic must only apply to alphabets. The logic must be circular other wise last few of small case alphabets will  be maped to special characters. 
+
+Level 12 : 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
+Go to root then to tmp. From tmp run cat data.txt | xxd -r > data (to store the file to data this also converts hex dump into ascii). This showed error as data.txt is already in that cd into that and then run it again. Now we repeatedly decompress it by storing it into .gz and decompressing using gzip. Initially I repeated the xxd command again and again, It only convert into ascii and doesn’t decompress.
+
+Level 13 : 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+
+ssh bandit14@localhost -i sshkey.private puts you to bandit14 user and then just cat /etc/bandit_pass/bandit14
+
+Level 14 : 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+
+We just need to change the local host to do that we can use nc localhost 30000. Put the password in and you’re done.
+
+Level 15 : BfMYroe26WYalil77FoDi9qh59eK5xNr
+
+openssl s_client -connect localhost:30001 -ign_eof
+Now paste the password.
+
+Level 16 : cluFn7wTiGryunymYOu4RcffSxQluehd
+
+nmap localhost -p 31000-32000 -A
+You’l get that port 31790 is the one where you need to give the password.
+
+RSA Key : 
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvmOkuifmMg6HL2YPIOjon6iWfbp7c3jx34YkYWqUH57SUdyJ
+imZzeyGC0gtZPGujUSxiJSWI/oTqexh+cAMTSMlOJf7+BrJObArnxd9Y7YT2bRPQ
+Ja6Lzb558YW3FZl87ORiO+rW4LCDCNd2lUvLE/GL2GWyuKN0K5iCd5TbtJzEkQTu
+...
+77pBAoGAMmjmIJdjp+Ez8duyn3ieo36yrttF5NSsJLAbxFpdlc1gvtGCWW+9Cq0b
+dxviW8+TFVEBl1O4f7HVm6EpTscdDxU+bCXWkfjuRb7Dy9GOtt9JPsX8MBTakzh3
+vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
+-----END RSA PRIVATE KEY-----
+
+Here I was stuck for a while. We need to login to server but just with RSA key(like in level 13). This helped: https://www.linode.com/docs/guides/use-public-key-authentication-with-ssh/
+
+Now we need to store this in a file. But touch doesn’t work. Hence we need to find the place where we have the access to edit.
+Go back 2 directories and then go to tmp and then bandit17
+touch key then vim key and then just insert the RSA key here.
+
+We also need to restrict what operations the file could have. Googling gives sudo chmod 400 as the easiest solution.
+
+Level 17 :
+
+diff passwords.old passwords.new
+
+< w0Yfolrc5bwjS4qw5mq1nnQi6mF03bii
+---
+> kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd
+
+This means new one have kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd hence this must be the password.
+
+Level 18 : kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd
+
+ssh bandit18@bandit.labs.overthewire.org -p 2220 "cat ~/readme" works.
+
+Level 19 : IueksS7Ubh8G3DCwVzrTd8rAVOwq3M5x
+
+./bandit20-do cat /etc/bandit_pass/bandit20. This worked
+
+Level 20 : GbKksEFF4yrVs6il55v6gwY5aVje5f0j
